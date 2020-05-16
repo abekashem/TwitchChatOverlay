@@ -67,13 +67,15 @@ def wrap_messages(username_text: List[str],
 
 
 def df_to_image(df: pd.DataFrame,
-                image_size: Tuple[int, int] = (1920, 1080),
-                text_position: Tuple[int, int] = (1920-600, 5),
-                font_size: int = 25) -> Image:
+                image_size: Tuple[int, int] = (350, 1080),
+                text_position: Tuple[int, int] = (5, 5),
+                font_size: int = 18,
+                text_color: Tuple[int, int, int] = (215, 215, 215),
+                bg_color: Tuple[int, int, int] = (25, 25, 25)) -> Image:
     """
-    Take a log dataframe and overlay it's text on a blank image.
+    Take a log dataframe and overlay its text on a blank image.
     """
-    image = Image.new('RGB', image_size)
+    image = Image.new('RGB', image_size, color=bg_color)
     message_text = df['message'].values.tolist()
     username_text = df['username'].values.tolist()
 
@@ -91,13 +93,14 @@ def df_to_image(df: pd.DataFrame,
         text=text_for_image,
         font=font,
         align='left',
+        fill=text_color,
     )
     return image
 
 
 def fill_df(df: pd.DataFrame,
             stored_df: pd.DataFrame,
-            target_len: int = 30) -> pd.DataFrame:
+            target_len: int = 50) -> pd.DataFrame:
     """
     Place rows from the stored dataframe before the target
     dataframe in order to reach the target number of rows.
@@ -113,14 +116,13 @@ def fill_df(df: pd.DataFrame,
         return pd.concat([stored_df.tail(rows_from_stored), df])
 
 
-def logs_to_video(log_path: str,
-                  video_name: str,
-                  video_size: Tuple[int, int] = (1920, 1080),
-                  max_messages: int = 30):
+def df_to_video(df: pd.DataFrame,
+                video_name: str,
+                video_size: Tuple[int, int] = (400, 1080),
+                max_messages: int = 50):
     """
     Write a video of chat based on an Overrustle log .txt file
     """
-    df = logs_to_df(log_path)
     frames_per_second = 1
 
     # Initialize an OpenCV VideoWriter to create an mp4
@@ -161,7 +163,7 @@ def logs_to_video(log_path: str,
         image = df_to_image(
             df=df_for_image,
             image_size=video_size,
-            text_position=(video_size[0] - 600, 5),
+            text_position=(5, 5),
         )
         # Convert image to an OpenCV acceptable numpy array and write to video
         video_writer.write(np.array(image))
@@ -173,8 +175,7 @@ def main():
     Write a video based on an Overrustle chat log.
     """
     parser = argparse.ArgumentParser(
-        description='Script to convert an Overrustle '
-                    'log file to a chat video.')
+        description='Script to convert an Overrustle log to a chat video.')
     parser.add_argument('-i', '--input', type=str,
                         default='OverRustleLogsDownloader/logs/Jerma985 chatlog/December 2019/2019-12-29.txt',
                         help='Filepath of an overrustle log file (.txt)')
@@ -182,7 +183,8 @@ def main():
                         help='Output video name, ')
     args = parser.parse_args()
 
-    logs_to_video(log_path=args.input, video_name=args.output)
+    df = logs_to_df(args.input)
+    df_to_video(df=df, video_name=args.output)
 
 
 if __name__ == '__main__':
