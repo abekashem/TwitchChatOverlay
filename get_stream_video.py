@@ -32,6 +32,8 @@ def main():
                         help='Filepath of a .csv file with stream data.')
     parser.add_argument('-o', '--output', default='output.mp4',
                         help='Output video name.')
+    parser.add_argument('--index', type=int, required=True,
+                        help='Index of stream CSV to get video for.')
     args = parser.parse_args()
 
     stream_df = pd.read_csv(args.stream_csv,
