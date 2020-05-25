@@ -1,11 +1,10 @@
 from pytube import YouTube
-import IPython
 from functools import partial
 from tqdm import tqdm
 
 
 video_link = 'https://www.youtube.com/watch?v=cVW78lRj1a4'
-output_name = 'mindshow_vr_youtube.mp4'
+output_name = 'pytube_output.mp4'
 
 
 def progress_function(chunk, file_handle, bytes_remaining, pbar):

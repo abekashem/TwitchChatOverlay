@@ -1,6 +1,5 @@
 import argparse
 import pandas as pd
-from IPython.terminal.embed import InteractiveShellEmbed
 
 
 def main():

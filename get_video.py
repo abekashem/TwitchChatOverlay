@@ -11,7 +11,6 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 from typing import Tuple, List
-from IPython.terminal.embed import InteractiveShellEmbed
 
 
 def logs_to_df(log_path: str, date_end_idx: int = 20) -> pd.DataFrame:
