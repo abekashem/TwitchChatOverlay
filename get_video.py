@@ -158,7 +158,7 @@ def df_to_video(df: pd.DataFrame,
             df=date_df,
             stored_df=df_for_image,
             target_len=max_messages,
-        )
+        ).copy()
 
         image = df_to_image(
             df=df_for_image,

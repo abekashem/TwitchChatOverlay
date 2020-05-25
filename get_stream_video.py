@@ -28,7 +28,7 @@ def main():
         description='Script to convert a text file of stream data to a csv.')
     parser.add_argument('--log_path', type=str, required=True,
                         help='Filepath containing .txt logs.')
-    parser.add_argument('--stream_csv', type=str, required=True,
+    parser.add_argument('--stream_csv', type=str, default='stream_data.csv',
                         help='Filepath of a .csv file with stream data.')
     parser.add_argument('-o', '--output', default='output.mp4',
                         help='Output video name.')
@@ -37,11 +37,12 @@ def main():
     stream_df = pd.read_csv(args.stream_csv,
                             parse_dates=['start_time', 'end_time'])
     path_df = get_path_df(args.log_path)
+
     path_df.sort_values('date')
 
-    seaman_stream = stream_df.iloc[207]
-    start_time = seaman_stream['start_time']
-    end_time = seaman_stream['end_time']
+    stream = stream_df.iloc[192]
+    start_time = stream['start_time']
+    end_time = stream['end_time']
 
     # Get relevant logs in case streams go through midnight
     relevant_logs = path_df[
