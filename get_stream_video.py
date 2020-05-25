@@ -2,7 +2,6 @@ import os
 import argparse
 import pandas as pd
 from get_video import logs_to_df, df_to_video
-from IPython.terminal.embed import InteractiveShellEmbed
 
 
 def get_path_df(log_path) -> pd.DataFrame:
