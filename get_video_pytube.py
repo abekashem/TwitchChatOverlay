@@ -1,26 +1,35 @@
+import argparse
+from tqdm import tqdm
 from pytube import YouTube
 from functools import partial
 from tqdm import tqdm
-
-
-video_link = 'https://www.youtube.com/watch?v=cVW78lRj1a4'
-output_name = 'pytube_output.mp4'
 
 
 def progress_function(chunk, file_handle, bytes_remaining, pbar):
     pbar.update(pbar.total - bytes_remaining - pbar.n)
 
 
-video_size = YouTube(video_link).streams.get_highest_resolution().filesize
-video = YouTube(
-    video_link,
-    on_progress_callback=partial(
-        progress_function, pbar=tqdm(total=video_size)),
-).streams.get_highest_resolution()
+def main():
+    parser = argparse.ArgumentParser(
+        description='Script to download a YouTube video.')
+    parser.add_argument('--url', type=str, required=True,
+                        help='Youtube video URL.')
+    parser.add_argument('-o', '--output', default='output.mp4',
+                        help='Output video name.')
+    args = parser.parse_args()
+
+    video_size = YouTube(args.url).streams.get_highest_resolution().filesize
+    video = YouTube(
+        args.url,
+        on_progress_callback=partial(
+            progress_function, pbar=tqdm(total=video_size)),
+    ).streams.get_highest_resolution()
+
+    print('Downloading video titled "{}" of resolution {} as {}'
+          .format(video.title, video.resolution, args.output))
+
+    video.download(filename=args.output)
 
 
-print('Downloading video titled "{}" of resolution to {} as {}'
-      .format(video.title, video.resolution, output_name))
-
-
-video.download(filename=output_name,)
+if __name__ == '__main__':
+    main()
