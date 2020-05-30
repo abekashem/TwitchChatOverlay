@@ -23,6 +23,7 @@ def main():
     output_name = os.path.basename(args.output)
 
     video_size = YouTube(args.url).streams.get_highest_resolution().filesize
+
     video = YouTube(
         args.url,
         on_progress_callback=partial(

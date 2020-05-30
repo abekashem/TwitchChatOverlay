@@ -41,7 +41,7 @@ def main():
 
     path_df.sort_values('date')
 
-    stream = stream_df.iloc[192]
+    stream = stream_df.iloc[args.index]
     start_time = stream['start_time']
     end_time = stream['end_time']
 
